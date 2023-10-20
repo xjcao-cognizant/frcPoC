@@ -1,0 +1,78 @@
+block dashboard
+  dashboard 
+    h1 #{title}
+     br
+     button.btn.btn-primary(type="submit") New Submission
+     br
+     h2 Manage your submission
+     form 
+      h3 #{exemptions[0].regulatedBusiness.name}
+      br
+      p
+        a(href="#") Change your selected organisation
+      table.table.table-striped.table-bordered 
+        tr 
+          th Reference Number
+          th Monitoring period
+          th Type
+          th Commodities
+          th Status
+          th Action
+          if (typeof exemptions === "undefined")
+            tr
+             td
+          else
+           each exemption in exemptions    
+              tr 
+                td #{exemption.referenceNumber}
+                - var startDate  = new Date(exemption.monitoringPeriod.startDate);
+                - var starmonth = startDate.getMonth() + 1;
+                - var staryear  = startDate.getFullYear();
+                - var endDate  = new Date(exemption.monitoringPeriod.endDate);
+                - var endmonth = endDate.getMonth() + 1;
+                - var endyear  = endDate.getFullYear();
+                    td #{starmonth + "/" + staryear + " to " + endmonth + "/" + endyear }
+                    td Exemption
+                    td
+                      table 
+                        each notification in exemption.exemptionNotifications
+                          - var commodity = notification.commodity.name;
+                          - var commodities = exemption.exemptionNotifications.map(a => a.commodity.name);
+                            tr 
+                              td #{commodity}
+                    td 
+                      table 
+                        if exemption.dateOfSubmission == ""
+                          tr 
+                            td In Progress
+                        else
+                          each notification in exemption.exemptionNotifications
+                            tr
+                              if notification.exemptionNotificationCancellation != null 
+                                td Cancelled
+                              else 
+                                if notification.dateOfSubmission != "" 
+                                  td Submitted
+                                else 
+                                  td In Progress
+                      td 
+                        table  
+                          if exemption.dateOfSubmission == ""
+                            tr 
+                              td 
+                                a(href="#" + exemption.id) Edit 
+                          else
+                            each notification in exemption.exemptionNotifications
+                              tr
+                                if notification.exemptionNotificationCancellation != null 
+                                  td 
+                                    a(href="/overview/" + exemption.id) View 
+                                else 
+                                  if notification.dateOfSubmission != "" 
+                                    td 
+                                      a(href="/overview/" + exemption.id) View 
+                                      a(href="#") Cancel                                                                 
+                                  else          
+                                    td 
+                                      a(href="#") Edit  
+                                           

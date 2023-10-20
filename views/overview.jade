@@ -1,0 +1,44 @@
+extends layout
+block overview
+ overview 
+    h1 #{title}
+    br
+    h2 General details
+    br
+    - var notifications = exemptions[0].exemptionNotifications;
+    table.table.table-striped.table-borderless
+        tr 
+            th Company
+            td #{exemptions[0].regulatedBusiness.name}
+        tr 
+            th Annual turnover 
+            td #{"£" + exemptions[0].regulatedBusiness.regulatedBusinessAnualTurnover}
+        tr 
+            th Monitoring period 
+            td #{exemptions[0].exemptionSubmissionPeriod.startDate + " to " + exemptions[0].exemptionSubmissionPeriod.endDate}
+        tr 
+            th Commodities 
+            td 
+                table 
+                    each notifictaion in notifications
+                        tr 
+                            td #{notifictaion.commodity.name}
+    br 
+
+    each notifictaion in notifications
+        table.table.table-striped.table-borderless  
+            thead.thead-dark
+                tr: th #{notifictaion.commodity.name}
+            tbody
+            tr
+                th Expected volume 
+                td #{notifictaion.usageAmountTones + " tones"}
+            tr 
+                th Methodology used 
+                td  #{notifictaion.methodsUsedToDetermin}
+            tr 
+                th Methodology documents 
+                td PLACEHOLDER
+            tr 
+                th Supporting documents
+                td PLACEHOLDER
